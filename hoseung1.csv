@@ -1,8 +1,0 @@
-ID	subject	medical	age	glasses	cosmetic	mask	ver	date	loc	inst	condition	posture	rev	image	FORMAT	rgb	ir	point	head	gaze	d_cam	d_disp	SPEC.	rgb.w	rgb.h	ir.w	ir.h	point	head	gaze	d_cam	d_disp	TOTAL SIZE	rgb	ir	point	head	gaze	d_cam	d_disp	TOTAL_COUNT	rgb	ir	point	head	gaze	d_cam	d_disp	TASK	name	created	updated	username	email
-	1	1	34	no	no	no	6	2022-06-08	S101	SXXXX	FXXXN	XDXXXXXXX	0			mp4	mp4	csv	csv	csv	csv	csv		1920	1080	1920	1080	"yyyy-mm-dd,hh:mm:ss,x,y
-"	"yyyy-mm-dd,hh:mm:ss,deg,deg,deg
-"	"yyyy-mm-dd,hh:mm:ss,deg,deg,deg
-"	"yyyy-mm-dd,hh:mm:ss,cm
-"	yyyy-mm-dd,hh:mm:ss,cm		0.827GB	0GB	0.001GB	5MB	5MB	5MB	5MB		6	1	6	6	6	6	6		NIA_EYE	"yyyy-mm-dd,hh:mm:ss
-"	"yyyy-mm-dd,hh:mm:ss
-"	hschoi	hschoi@dinsight.ai
