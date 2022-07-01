@@ -263,7 +263,7 @@ class Fake_generator():
         yaw = np.rad2deg(np.arctan(yy))
         
         roll = np.zeros(self.nframes)
-        self.disp_pose = {"time":self.timestamp, "roll":roll, "pitch":pitch, "yaw":yaw}        
+        self.cam = {"time":self.timestamp, "roll":roll, "pitch":pitch, "yaw":yaw}        
         
     def gen_d_cam(self, target_dist):
         condition = self.condition
@@ -347,7 +347,7 @@ class Fake_generator():
         self.convert_gaze_to_angle() # also need display pose 
 
     def save_all(self):
-        datasets = ['point', 'head', 'disp_pose', 'gaze', 'd_cam', 'd_disp']
+        datasets = ['point', 'head', 'cam', 'gaze', 'd_cam', 'd_disp']
         field = "all"
         for dd in datasets:
             fn = f"{self.wdir}{self.display}_{self.posture}_{self.condition}_{self.orientation}_{dd}.csv"
@@ -362,14 +362,15 @@ class Fake_generator():
         for ff in fields:
             header = header + ff + ", "
             if ff == "time":
-                fmt = fmt + "%.24s "
+                fmt = fmt + "%.24s, "
             else:
-                fmt = fmt + "%.5s "
+                fmt = fmt + "%.5s, "
         header = header[:-2] # remove trailing ','
+        fmt = fmt[:-2] # remove trailing ','
         #print(np.transpose([dataset[ff] for ff in fields]))
         np.savetxt(fn, np.transpose([dataset[ff] for ff in fields]), 
                     header=header, 
-                    delimiter=",", 
+                    #delimiter=",", 
                     fmt=fmt)
                     
     def convert_gaze_to_angle(self):

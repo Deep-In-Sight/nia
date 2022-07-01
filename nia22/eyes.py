@@ -112,3 +112,4 @@ def mask_one_eye(img, eye, side = "l"):
     pupil_mask = mask_iris(pupil, area)
     mask = mask + iris_mask + pupil_mask
     return cropped, mask
+
