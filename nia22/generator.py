@@ -343,7 +343,7 @@ class Fake_generator():
             self.gaze_x = np.clip(point_x + errx, 0, self.width) # [0, 1920]
             self.gaze_y = np.clip(point_y + erry, 0, self.height) # [0, 1080]
 
-        self.point = {"time":self.timestamp, 'point_x':point_x, 'point_y':point_y}
+        self.point = {"time":self.timestamp, 'point_x':point_x.astype(int), 'point_y':point_y.astype(int)}
         self.convert_gaze_to_angle() # also need display pose 
 
     def save_all(self):
@@ -364,10 +364,9 @@ class Fake_generator():
             if ff == "time":
                 fmt = fmt + "%.24s, "
             else:
-                fmt = fmt + "%.5s, "
+                fmt = fmt + "%.6s, "
         header = header[:-2] # remove trailing ','
         fmt = fmt[:-2] # remove trailing ','
-        #print(np.transpose([dataset[ff] for ff in fields]))
         np.savetxt(fn, np.transpose([dataset[ff] for ff in fields]), 
                     header=header, 
                     #delimiter=",", 
