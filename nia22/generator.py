@@ -199,7 +199,7 @@ class Fake_generator():
         self.gen_d_cam()
         self.gen_d_disp()        
         self.gen_head()
-        self.gen_pose_d()
+        #self.gen_pose_d()
         self.gen_gaze_eye_trakcer()
         
     def gen_timestamp(self):
