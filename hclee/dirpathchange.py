@@ -2,10 +2,16 @@ import glob
 import os
 import shutil
 
-posedic = {'서기':'S','앉기':'D','위로눕기':'P','옆으로눕기':'L','엎드리기':'F', '턱괴기':'C', '한손기기사용':'H', '음식섭취':'E', '무릎거치':'K', '휴대폰사용':'U'}
-statedic = {'집중':'F','졸림':'S','집중결핍(산만)':'D','집중하락':'A','태만(이탈)':'N'}
+posedic = {'서기':'S','앉기':'D','위로눕기':'P',
+        '옆으로눕기':'L','엎드리기':'F', '턱괴기':'C', 
+        '한손기기사용':'H', '음식섭취':'E', 
+        '무릎거치':'T', '휴대폰사용':'U'}
+statedic = {'집중':'F','졸림':'S','집중결핍(산만)':'D',
+        '집중하락':'A','태만(이탈)':'N'}
 dispdic = {'상단에위치':'T','좌측에위치':'L','우측에위치':'R'}
-typedic = {'차량':'VehicleLCD','모니터':'Monitor','노트북1':'Laptop','노트북3':'Laptop','태블릿2':'Tablet','태블릿3':'Tablet','스마트폰2':'Smartphone','스마트폰3':'Smartphone'}
+typedic = {'차량':'VehicleLCD','모니터':'Monitor','노트북1':'Laptop',
+        '노트북3':'Laptop','태블릿2':'Tablet','태블릿3':'Tablet',
+        '스마트폰2':'Smartphone','스마트폰3':'Smartphone'}
 idDirlist = glob.glob('*_*')
 pcClass = ['차량','모니터','노트북']
 moClass = ['태블릿','스마트폰']

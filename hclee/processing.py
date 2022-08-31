@@ -241,7 +241,7 @@ class Processing():
                             resultDistance.append(distance)
                             continue
                 
-                ind_first_ok = np.argmax(resultDistance > 0)
+                ind_first_ok = np.argmax(np.array(resultDistance) > 0)
                 for i in range(ind_first_ok):
                     resultDistance[i] = resultDistance[ind_first_ok]
                 
