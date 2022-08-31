@@ -110,6 +110,7 @@ for idDir in idDirlist:
             pose = dirname.split('_')[1]
             state = dirname.split('_')[-1]
             disp = dirname.split('_')[2].split('-')[-1]
+            # 랜덤 시나리오가 PC에서는 10, 모바일에서는 11로 나옴 
             if dirname.split('_')[0] != '11' or dirname.split('_')[0] != '10':
                 scenario = dirname.split('_')[0]
                 scenario = scenario.zfill(2)

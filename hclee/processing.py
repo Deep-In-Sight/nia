@@ -1,9 +1,10 @@
 import glob
+import re
 import cv2
 import mediapipe as mp
 import pandas as pd
 import math
-import numpy
+import numpy as np
 import os
 import shutil
 
@@ -31,6 +32,7 @@ class Processing():
                 pitch = csv['Pitch'].tolist()
                 yaw = csv['Yaw'].tolist()
                 r, c = csv.shape
+                # 프레임 갯수 맞춰서 
                 num = r / 300
                 newlist = []
                 
@@ -56,6 +58,7 @@ class Processing():
             for target in tarlist:
                 tarsize = os.path.getsize(target)
                 
+                # 비어있으면 파일 안 옮김
                 if tarsize > 0:
                     with open(target) as fl:
                         contents = fl.read().splitlines()
@@ -149,11 +152,13 @@ class Processing():
                 shutil.copy(target, savename)
             
     def Dcam(self):
+        """미디어파이프로 거리 계산
+        """
         mp_face_mesh = mp.solutions.face_mesh
         target = ['Monitor','Laptop','Smartphone','Tablet','VehicleLCD']
         idx = mp_face_mesh.FACEMESH_IRISES
         irisRealSize = 11.7E-3
-        distance = 150.47101940872201
+        distance = -1 #150.47101940872201 # 첫 프레임에 없으면 아무 값이나.  
         for tar in target:
             ptarget = f"pro*/*/*/*/{tar}/RGB/*"
             plist = glob.glob(ptarget)
@@ -236,6 +241,9 @@ class Processing():
                             resultDistance.append(distance)
                             continue
                 
+                ind_first_ok = np.argmax(resultDistance > 0)
+                for i in range(ind_first_ok):
+                    resultDistance[i] = resultDistance[ind_first_ok]
                 
                 print(svname, "saving..")
                 df = pd.DataFrame(resultDistance, columns = ['distance'])
