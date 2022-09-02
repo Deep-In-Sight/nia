@@ -45,7 +45,7 @@ class Processing():
                     newlist.append(inrpw)
                     
                 df = pd.DataFrame(newlist, columns = ['Roll','Pitch','Yaw'])
-                df.to_csv(target)
+                df.to_csv(target, index=False)
 
 
     def gyro_mobile(self):
@@ -74,7 +74,7 @@ class Processing():
                     
                     df = pd.DataFrame(savecontents, columns = ['Roll','Pitch','Yaw'])
                     savename = target[:-3] + 'csv'
-                    df.to_csv(savename)
+                    df.to_csv(savename, index=False)
                 
             #for target in tarlist:
                 #os.remove(target)
@@ -112,7 +112,7 @@ class Processing():
                         savename = save.split("RGB")[0] + "GazeAngle1" + save.split("RGB")[1]
                         savename = savename.split('rgb')[0] + 'gaze1' + savename.split('rgb')[1]
                         savename = savename[:-3] + 'csv'
-                        df.to_csv(savename)
+                        df.to_csv(savename, index=False)
                         print(savename)
                     break;
             
@@ -134,7 +134,27 @@ class Processing():
                 svname2 = svname.split("dcam")[0] + 'ddisp' + svname.split("dcam")[1]
                 
                 os.rename(pr, svname2)
+    
+    def Ddisp_haveDepth_tocsv(self):
+        disptarget = ['Monitor','VehicleLCD']
+
+        for tar in disptarget:
+            ptarget = f"pro*/*/*/*/{tar}/DistDisp*/*.txt"
+            plist = glob.glob(ptarget)
+            plist.sort()
+            
+            for pr in plist:
+                tarsize = os.path.getsize(pr)
                 
+                if tarsize > 0:
+                    with open(pr) as fl:
+                        contents = fl.read().splitlines()
+                
+                df = pd.DataFrame(contents, columns = ['distance'])
+                savename = pr[:-3] + 'csv'
+                df.to_csv(savename, index=False)
+                        
+        
     def Ddisp_noDepth(self):
         targetDivList = ['Laptop','Smartphone','Tablet']
 
@@ -247,7 +267,7 @@ class Processing():
                 
                 print(svname, "saving..")
                 df = pd.DataFrame(resultDistance, columns = ['distance'])
-                df.to_csv(svname)
+                df.to_csv(svname, index=False)
 
     
                 
