@@ -194,8 +194,8 @@ class Processing():
                 FOV = 120
             elif tar == 'Laptop':
                 #temporary
-                Focal == 3.0E-3
-                FOV = 85
+                Focal == 3.7E-3
+                FOV = 78
             pixSize = ( Focal * math.tan((FOV/2) * math.pi / 180) ) / 1920
             for pr in plist:
                 svname = pr.split("RGB")[0] + 'DistCam2Face' + pr.split("RGB")[1]

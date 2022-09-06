@@ -45,7 +45,6 @@ for idDir in idDirlist:
             rgbvid = glob.glob(dirpath + '/video1*')
             irvid = glob.glob(dirpath + '/video2*')    
             gyro1 = glob.glob(dirpath + '/*1.txt')
-            gyro2 = glob.glob(dirpath + '/*2.txt')
             depth = glob.glob(dirpath + '/*sensor.txt')
             
             if rgbvid:
@@ -73,25 +72,14 @@ for idDir in idDirlist:
                 print(targetname)
             if gyro1:
                 gyro1 = gyro1[0]
-                targetpath = f"processing/{place}/{ID}/{Try}/{type}/GazeAngle1"
+                targetpath = f"processing/{place}/{ID}/{Try}/{type}/CamAngle"
                 os.makedirs(targetpath,exist_ok=True)
-                targetname = f"{targetpath}/NIA22EYE_{place}_{ID}_{Try}_S{scenario}_{type[0]}_gaze1_{state}_{pose}_{disp}.txt"
+                targetname = f"{targetpath}/NIA22EYE_{place}_{ID}_{Try}_S{scenario}_{type[0]}_cam_{state}_{pose}_{disp}.txt"
                 if os.path.isfile(targetname):
                     print("isfile!", gyro1)
                     print("filesize", os.path.getsize(targetname))
                 else:
                     os.rename(gyro1, targetname)
-                print(targetname)
-            if gyro2:
-                gyro2 = gyro2[0]
-                targetpath = f"processing/{place}/{ID}/{Try}/{type}/GazeAngle2"
-                os.makedirs(targetpath,exist_ok=True)
-                targetname = f"{targetpath}/NIA22EYE_{place}_{ID}_{Try}_S{scenario}_{type[0]}_gaze2_{state}_{pose}_{disp}.txt"
-                if os.path.isfile(targetname):
-                    print("isfile!", gyro2)
-                    print("filesize", os.path.getsize(targetname))
-                else:
-                    os.rename(gyro2, targetname)
                 print(targetname)
             if depth:
                 depth = depth[0]
@@ -144,9 +132,9 @@ for idDir in idDirlist:
             
             if gyro1:
                 gyro1 = gyro1[0]
-                targetpath = f"processing/{place}/{ID}/{Try}/{type}/GazeAngle1"
+                targetpath = f"processing/{place}/{ID}/{Try}/{type}/CamAngle"
                 os.makedirs(targetpath,exist_ok=True)
-                targetname = f"{targetpath}/NIA22EYE_{place}_{ID}_{Try}_S{scenario}_{type[0]}_gaze1_{state}_{pose}_{disp}.txt"
+                targetname = f"{targetpath}/NIA22EYE_{place}_{ID}_{Try}_S{scenario}_{type[0]}_cam_{state}_{pose}_{disp}.txt"
                 if os.path.isfile(targetname):
                     print("isfile!", gyro1)
                     print("filesize", os.path.getsize(targetname))
