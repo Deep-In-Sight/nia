@@ -2,6 +2,13 @@ import numpy as np
 from glob import glob
 from functools import partial
 
+
+### 공통
+loc = "S101"
+inst = "STLVM"
+condition = "FSDAN"
+posture = "SDPLFCHETU"
+
 def get_converter(field:str):
     if field == "inst":
         keys = ["S", "T", "L", "V", "M"]

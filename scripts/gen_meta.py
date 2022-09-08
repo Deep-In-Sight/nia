@@ -11,14 +11,7 @@ from meta_utils import *
 
 wdir = "./"
 nas_dir = './NAS/'
-
-### 공통
-loc = "S101"
-inst = "STLVM"
-condition = "FSDAN"
-posture = "SDPLFCHETU"
-###
-
+fn_meta = '/home/di/Work/data/NIA2022/메타데이터.xlsx'
 
 
 # Init concatenators
@@ -28,7 +21,7 @@ concat_posture = get_converter("posture")
 
 
 ## Read metadata file
-xlsx = pd.read_excel('/home/hoseung/Dropbox/DeepInsight/2022/NIA/metadata/메타데이터.xlsx')
+xlsx = pd.read_excel(fn_meta)
 xlsx = list(xlsx.values)
 
 
