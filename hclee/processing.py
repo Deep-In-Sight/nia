@@ -8,20 +8,25 @@ import numpy as np
 import os
 import shutil
 
-class Processing():    
+class Processing():  
     def __init__(self):
+        self.framenum = 300
+        
         self.Ddisp_haveDepth()
         self.Dcam()
         self.Ddisp_noDepth()
+        self.Ddisp_haveDepth_tocsv()
         self.gyro_mobile()
         self.gyro_pc()
         self.gaze()
-    
+        
+        
+
     def gaze(self):
         targetDivList = ['Monitor','Laptop','VehicleLCD','Smartphone','Tablet']
 
         for Div in targetDivList:
-            tarliststr = f"pro*/*/*/*/{Div}/GazeAngle1/*.csv"
+            tarliststr = f"pro*/*/*/*/{Div}/CamAngle/*.csv"
             tarlist = glob.glob(tarliststr)
             df = pd.DataFrame()
             
@@ -33,10 +38,10 @@ class Processing():
                 yaw = csv['Yaw'].tolist()
                 r, c = csv.shape
                 # 프레임 갯수 맞춰서 
-                num = r / 300
+                num = (r-1) / self.framenum
                 newlist = []
                 
-                for n in range(300):
+                for n in range(self.framenum):
                     r = roll[int(n*num)]
                     p = pitch[int(n*num)]
                     w = yaw[int(n*num)]
@@ -52,7 +57,7 @@ class Processing():
         targetDivList = ['Smartphone','Tablet']
         
         for Div in targetDivList:
-            tarliststr = f"pro*/*/*/*/{Div}/GazeAngle1/*.txt"
+            tarliststr = f"pro*/*/*/*/{Div}/CamAngle/*.txt"
             tarlist = glob.glob(tarliststr)
             
             for target in tarlist:
@@ -83,7 +88,7 @@ class Processing():
         targetDivList = ['Monitor','Laptop','VehicleLCD']
     
         for Div in targetDivList:
-            tarliststr = f"pro*/*/*/*/{Div}/GazeAngle1/*.txt"
+            tarliststr = f"pro*/*/*/*/{Div}/CamAngle/*.txt"
             tarlist = glob.glob(tarliststr)
             tarlist.sort()
             saveliststr = f"pro*/*/*/*/{Div}/RGB/*"
@@ -109,8 +114,8 @@ class Processing():
                     df = pd.DataFrame(savecontents, columns = ['Roll','Pitch','Yaw'])
                     
                     for save in savelist:
-                        savename = save.split("RGB")[0] + "GazeAngle1" + save.split("RGB")[1]
-                        savename = savename.split('rgb')[0] + 'gaze1' + savename.split('rgb')[1]
+                        savename = save.replace('RGB','CamAngle')
+                        savename = savename.replace('_rgb_','_cam_')
                         savename = savename[:-3] + 'csv'
                         df.to_csv(savename, index=False)
                         print(savename)
@@ -205,6 +210,7 @@ class Processing():
                     print(svname,"isfile")
                     continue
                 cap = cv2.VideoCapture(pr)
+                self.framenum = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
                 resultDistance = []
                 drname = pr.split("RGB")[0] + 'DistCam2Face'
                 os.makedirs(drname, exist_ok=True)
@@ -256,9 +262,9 @@ class Processing():
                             
                             distance = ( distanceLeft + distanceRight ) / 2 * 100 #cm
                             
-                            resultDistance.append(distance)
+                            resultDistance.append(int(distance))
                         except:
-                            resultDistance.append(distance)
+                            resultDistance.append(int(distance))
                             continue
                 
                 ind_first_ok = np.argmax(np.array(resultDistance) > 0)

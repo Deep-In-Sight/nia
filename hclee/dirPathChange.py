@@ -74,7 +74,7 @@ for idDir in idDirlist:
                 gyro1 = gyro1[0]
                 targetpath = f"processing/{place}/{ID}/{Try}/{type}/CamAngle"
                 os.makedirs(targetpath,exist_ok=True)
-                targetname = f"{targetpath}/NIA22EYE_{place}_{ID}_{Try}_S{scenario}_{type[0]}_cam_{state}_{pose}_{disp}.csv"
+                targetname = f"{targetpath}/NIA22EYE_{place}_{ID}_{Try}_S{scenario}_{type[0]}_cam_{state}_{pose}_{disp}.txt"
                 if os.path.isfile(targetname):
                     print("isfile!", gyro1)
                     print("filesize", os.path.getsize(targetname))
@@ -83,9 +83,9 @@ for idDir in idDirlist:
                 print(targetname)
             if depth:
                 depth = depth[0]
-                targetpath = f"processing/{place}/{ID}/{Try}/{type}/DistCam2Face"
+                targetpath = f"processing/{place}/{ID}/{Try}/{type}/DistDisp2Face"
                 os.makedirs(targetpath,exist_ok=True)
-                targetname = f"{targetpath}/NIA22EYE_{place}_{ID}_{Try}_S{scenario}_{type[0]}_dcam_{state}_{pose}_{disp}.csv"
+                targetname = f"{targetpath}/NIA22EYE_{place}_{ID}_{Try}_S{scenario}_{type[0]}_ddisp_{state}_{pose}_{disp}.txt"
                 if os.path.isfile(targetname):
                     print("isfile!", depth)
                     print("filesize", os.path.getsize(targetname))
@@ -134,7 +134,7 @@ for idDir in idDirlist:
                 gyro1 = gyro1[0]
                 targetpath = f"processing/{place}/{ID}/{Try}/{type}/CamAngle"
                 os.makedirs(targetpath,exist_ok=True)
-                targetname = f"{targetpath}/NIA22EYE_{place}_{ID}_{Try}_S{scenario}_{type[0]}_cam_{state}_{pose}_{disp}.csv"
+                targetname = f"{targetpath}/NIA22EYE_{place}_{ID}_{Try}_S{scenario}_{type[0]}_cam_{state}_{pose}_{disp}.txt"
                 if os.path.isfile(targetname):
                     print("isfile!", gyro1)
                     print("filesize", os.path.getsize(targetname))
