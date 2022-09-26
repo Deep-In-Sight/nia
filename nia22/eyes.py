@@ -112,16 +112,18 @@ def mask_one_eye(img, eye, side = "l"):
 
     # pupil as a small iris
     pupil ={'rotate': 0.0,
-            'rx': 0.2 * iris['rx'],
-            'ry': 0.2 * iris['rx'],
-            'cx': pupil_x,
-            'cy': pupil_y}
+                'rx': 0.2 * iris['rx'],
+                'ry': 0.2 * iris['rx'],
+                'cx': pupil_x,
+                'cy': pupil_y}
 
     pupil_mask = mask_iris(pupil, area, fill=3)
     mask = np.maximum.reduce([mask, iris_mask, pupil_mask])
     return cropped, mask
 
 class Info():
+    """An iterator over the frames of a video.
+    """
     def __init__(self, fn_full, vid_dir=None):
         # {path/to/file/}{X_X_X_X_X_}{#frame}.{ext}
         self.fn_full = fn_full
@@ -144,6 +146,7 @@ class Info():
         
         self.fn_family = self._all_json()
         self.frames = self.get_nums()
+        self._nframes = len(self.frames)
 
         # Default
         if vid_dir is None:
@@ -166,6 +169,22 @@ class Info():
         ll = glob(self._dir + self._fn_base + "*.json")
         ll.sort()
         return [l.replace(self._dir,"") for l in ll]
+
+    def json_at(self, frame):
+        """read jason at a given frame"""
+        return self._dir + self._fn_base + f"{frame:03d}.json"
+
+    def __iter__(self):
+        self._ind = 0
+        return self
+
+    def __next__(self):
+        if self._ind < self._nframes:
+            out = self.frames[self._ind], self.fn_family[self._ind]
+            self._ind += 1
+            return out
+        else:
+            raise StopIteration
     
     def get_nums(self):
         """get the list of frames in a video"""
