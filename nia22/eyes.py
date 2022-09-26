@@ -1,5 +1,13 @@
+import os
 import numpy as np
 from PIL import Image, ImageDraw
+from glob import glob
+
+device_dict={"S":"Smartphone", 
+             "T":"Tablet",
+             "L":"Laptop",
+             "V":"VehicleLCD",
+             "M":"Monitor"}
 
 class Eye():
     def __init__(self, anno):
@@ -10,8 +18,8 @@ class Eye():
             except:
                 print("what is this annotation?", ano)
                 
-        self.l_iris.update({"rotate":.4})
-        self.r_iris.update({"rotate":.1})
+        #self.l_iris.update({"rotate":.4})
+        #self.r_iris.update({"rotate":.1})
                 
     def __repr__(self):
         print(self.anno)
@@ -59,7 +67,7 @@ def mask_eyelid(eyelid, area, cropped):
     ImageDraw.Draw(mask).polygon(polygon, outline=1, fill=1)
     return np.array(mask)
 
-def mask_iris(iris, area):
+def mask_iris(iris, area, fill=2):
     """Mask for RITnet
     """
     nx = area['xrange'][1] - area['xrange'][0]
@@ -87,7 +95,7 @@ def mask_iris(iris, area):
     rad_cc = (xct**2/ra**2) + (yct**2/rb**2)
 
     mask = np.zeros_like(rad_cc)
-    mask[rad_cc <= 1.] = 1
+    mask[rad_cc <= 1.] = fill
     return mask.reshape(nx, ny)
 
 
@@ -109,7 +117,68 @@ def mask_one_eye(img, eye, side = "l"):
             'cx': pupil_x,
             'cy': pupil_y}
 
-    pupil_mask = mask_iris(pupil, area)
-    mask = mask + iris_mask + pupil_mask
+    pupil_mask = mask_iris(pupil, area, fill=3)
+    mask = np.maximum.reduce([mask, iris_mask, pupil_mask])
     return cropped, mask
 
+class Info():
+    def __init__(self, fn_full, vid_dir=None):
+        # {path/to/file/}{X_X_X_X_X_}{#frame}.{ext}
+        self.fn_full = fn_full
+        self.fn_json = fn_full.split("/")[-1]
+        self._dir = fn_full.replace(self.fn_json, "")
+        
+        _,_,id,_,scenario,device,dtype,status,posture,orientation,num = \
+            self.fn_json.split("_")
+        self.id = id
+        self.scenario = scenario
+        self.device = device        
+        self.device_d = device_dict[self.device]
+        self.dtype = dtype
+        self.status = status
+        self.posture = posture
+        self.orient = orientation
+        
+        # X_X_X_X_X
+        self._fn_base = "_".join(self.fn_json.split("_")[:-1])
+        
+        self.fn_family = self._all_json()
+        self.frames = self.get_nums()
+
+        # Default
+        if vid_dir is None:
+            self.vid_dir = self._dir
+        else:
+            self.vid_dir = vid_dir
+    
+    @property
+    def vid_dir(self):
+        return self._vid_dir 
+    @vid_dir.setter
+    def vid_dir(self, path):
+        self._vid_dir = path
+        self.fn_vid = self._fn_base + ".mp4"
+        self._check_vid()
+        
+    def _all_json(self):
+        """return all jsons belong to the same clip
+        """
+        ll = glob(self._dir + self._fn_base + "*.json")
+        ll.sort()
+        return [l.replace(self._dir,"") for l in ll]
+    
+    def get_nums(self):
+        """get the list of frames in a video"""
+        return [self._get_num(fn) for fn in self.fn_family]
+    
+    def _get_num(self, fn):
+        num = fn.split("_")[-1]
+        return int(num.split(".")[0])
+
+    def _check_vid(self):
+        if os.path.isfile(self.vid_dir + self.fn_vid):
+            self._vid_good=True
+        else:
+            self._vid_good=False
+            print("[Warning], Can't find the video file...")
+            print(self.vid_dir + self.fn_vid, "is missing!")
