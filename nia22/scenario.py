@@ -39,14 +39,12 @@ class Info():
         self._nframes = len(self.frames)
 
         # Default
-        if vid_dir is None:
-            self.vid_dir = self._dir
-        else:
-            self.vid_dir = vid_dir
+        if vid_dir: self.vid_dir = vid_dir
 
     @property
     def vid_dir(self):
         return self._vid_dir 
+
     @vid_dir.setter
     def vid_dir(self, path):
         self._vid_dir = path
