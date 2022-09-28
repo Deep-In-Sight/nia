@@ -6,12 +6,22 @@ from .eyes import device_dict
 class Info():
     """An iterator over the frames of a video.
     """
-    def __init__(self, base_dir = None, scen = None, fn_full=None, vid_dir=None):
+    def __init__(self, 
+                    base_dir = None, 
+                    scen = None, 
+                    fn_full=None, 
+                    vid_dir=None,
+                    devices=["S", "T", "L", "V", "M"]):
         # {path/to/file/}{X_X_X_X_X_}{#frame}.{ext}
+        try:
+            len(devices)
+        except:
+            devices = [devices]
+        
         if scen:
             if base_dir:
                 self._dir = base_dir
-                self.fn_full = glob(self._dir + f"*_{scen}_???.json")[0]
+                self.fn_full = glob(self._dir + f"*{devices[0]}_*_{scen}_???.json")[0]
             else:
                 raise Exception("[ERROR], No base_dir is given")
         elif fn_full:
@@ -24,7 +34,7 @@ class Info():
             self.fn_json.split("_")
         self.id = id
         self.scenario = scenario
-        self.device = device        
+        self.device = devices
         self.device_d = device_dict[self.device]
         self.dtype = dtype
         self.status = status
