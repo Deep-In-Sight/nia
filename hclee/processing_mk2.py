@@ -7,7 +7,7 @@ import numpy as np
 import os
 import shutil
 
-targetIdList = glob.glob("pro*/S1/*")
+targetIdList = glob.glob("*/pro*/S1/*")
 targetIdList.sort()
 print(targetIdList)
 
@@ -45,7 +45,7 @@ for targetId in targetIdList:
                 distance = -1   #첫 프레임에 없으면 아무 값이나.
                 Focal = 3.7E-3  #카메라의 초점거리와 시야각
                 Fov = 78        #각 촬영 기기마다 고유의 값을 가짐
-                pixSize = ( Focal * math.tan((Fov/2) * math.pi / 180) ) / 1920
+                pixSize = ( Focal * math.tan((Fov/2) * math.pi / 180) ) / 1920 * 2
                 
                 resultDistance = []
                 #MediaPipe로 distance 계산, 추후 보정이 필요할 수 있음
@@ -167,7 +167,7 @@ for targetId in targetIdList:
                 distance = -1   #첫 프레임에 없으면 아무 값이나.
                 Focal = 2.0E-3  #카메라의 초점거리와 시야각
                 Fov = 120       #각 촬영 기기마다 고유의 값을 가짐
-                pixSize = ( Focal * math.tan((Fov/2) * math.pi / 180) ) / 1920
+                pixSize = ( Focal * math.tan((Fov/2) * math.pi / 180) ) / 1920 * 2
                 
                 resultDistance = []
                 #MediaPipe로 distance 계산, 추후 보정이 필요할 수 있음
@@ -277,7 +277,7 @@ for targetId in targetIdList:
                 distance = -1   #첫 프레임에 없으면 아무 값이나.
                 Focal = 2.2E-3  #카메라의 초점거리와 시야각
                 Fov = 80        #각 촬영 기기마다 고유의 값을 가짐
-                pixSize = ( Focal * math.tan((Fov/2) * math.pi / 180) ) / 1920
+                pixSize = ( Focal * math.tan((Fov/2) * math.pi / 180) ) / 1920 * 2
                 
                 resultDistance = []
                 #MediaPipe로 distance 계산, 추후 보정이 필요할 수 있음
@@ -388,7 +388,7 @@ for targetId in targetIdList:
                 #노트북의 초점거리, 시야각은 임시값임 
                 Focal = 3.7E-3  #카메라의 초점거리와 시야각
                 Fov = 78        #각 촬영 기기마다 고유의 값을 가짐
-                pixSize = ( Focal * math.tan((Fov/2) * math.pi / 180) ) / 1920
+                pixSize = ( Focal * math.tan((Fov/2) * math.pi / 180) ) / 1920 * 2
                 
                 resultDistance = []
                 #MediaPipe로 distance 계산, 추후 보정이 필요할 수 있음
@@ -483,7 +483,7 @@ for targetId in targetIdList:
 target = ['CamAngle','DistCam2Face','DistDisp2Face']
 
 for tar in target:
-    fpath = glob.glob(f"pro*/S1/*/T1/*/{tar}/*.csv")
+    fpath = glob.glob(f"*/pro*/S1/*/T1/*/{tar}/*.csv")
     fpath.sort()
     
     for f in fpath:

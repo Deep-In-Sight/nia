@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="8dp"
+    tools:context=".SelectGuideActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/img_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_baseline_arrow_back_24" />
+
+                <TextView
+                    android:id="@+id/txt_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="뒤로가기"
+                    android:textSize="20sp" />
+            </androidx.appcompat.widget.Toolbar>
+
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="["
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+            <TextView
+                android:id="@+id/txt_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="상태"
+                android:textColor="#FF0000"
+                android:textSize="23sp"
+                app:layout_constraintBottom_toBottomOf="@+id/textView20"
+                app:layout_constraintStart_toEndOf="@+id/textView20"
+                app:layout_constraintTop_toTopOf="@+id/textView20"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <TextView
+                android:id="@+id/textView21"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="]에 대한 촬영자의 상태는"
+                android:textColor="@color/black"
+                android:textSize="19sp"
+                app:layout_constraintBottom_toBottomOf="@+id/textView20"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/txt_status"
+                app:layout_constraintTop_toTopOf="@+id/textView20"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <TextView
+                android:id="@+id/textView22"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="다음과 같습니다.\n아래 가이드에 따라 10초동안 연기해주세요."
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView21" />
+
+            <ImageView
+                android:id="@+id/img_status"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="52dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/cond1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView22" />
+
+            <ImageView
+                android:id="@+id/img_check1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="32dp"
+                android:src="@drawable/ic_baseline_check_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_status"
+                app:tint="@color/concept_color" />
+
+            <TextView
+                android:id="@+id/txt_cond_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="조건1"
+                android:textColor="@color/concept_color"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@+id/img_check1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/img_check1"
+                app:layout_constraintTop_toTopOf="@+id/img_check1"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <ImageView
+                android:id="@+id/img_check2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:src="@drawable/ic_baseline_check_24"
+                app:layout_constraintStart_toStartOf="@+id/img_check1"
+                app:layout_constraintTop_toBottomOf="@+id/img_check1"
+                app:tint="@color/concept_color" />
+
+            <TextView
+                android:id="@+id/txt_cond_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="조건2"
+                android:textColor="@color/concept_color"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@+id/img_check2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/img_check2"
+                app:layout_constraintTop_toTopOf="@+id/img_check2"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <ImageView
+                android:id="@+id/img_check3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:src="@drawable/ic_baseline_check_24"
+                app:layout_constraintStart_toStartOf="@+id/img_check2"
+                app:layout_constraintTop_toBottomOf="@+id/img_check2"
+                app:tint="@color/concept_color" />
+
+            <TextView
+                android:id="@+id/txt_cond_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="조건3"
+                android:textColor="@color/concept_color"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@+id/img_check3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/img_check3"
+                app:layout_constraintTop_toTopOf="@+id/img_check3"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <LinearLayout
+                android:id="@+id/linear_start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/radius_border_blue"
+                android:gravity="center"
+                android:padding="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_cond_3"
+                app:layout_constraintVertical_bias="1.0">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="START"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    tools:layout_editor_absoluteX="8dp"
+                    tools:layout_editor_absoluteY="695dp" />
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

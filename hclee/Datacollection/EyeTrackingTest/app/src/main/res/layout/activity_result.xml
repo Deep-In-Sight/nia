@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ResultActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView23"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="80dp"
+                android:gravity="center"
+                android:text="테스트가 종료되었습니다."
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/btn_reStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="#FF9800"
+                android:text="다시 시작"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView23" />
+
+            <LinearLayout
+                android:id="@+id/btn_change_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:layout_marginTop="108dp"
+                android:background="@drawable/square_border"
+                android:gravity="center"
+                android:paddingVertical="30dp"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_reStart">
+
+                <TextView
+                    android:id="@+id/txt_change_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="촬영자 상태 변경"
+                    android:textColor="@color/concept_color"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_change_device_direction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/square_border"
+                android:gravity="center"
+                android:paddingVertical="30dp"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_change_status">
+
+                <TextView
+                    android:id="@+id/txt_change_device_direction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="기기 방향 변경"
+                    android:textColor="@color/concept_color"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_change_user_posture"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:layout_marginStart="4dp"
+                android:background="@drawable/square_border"
+                android:gravity="center"
+                android:paddingVertical="30dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_change_device_direction">
+
+                <TextView
+                    android:id="@+id/txt_change_user_posture"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="촬영자 자세 변경"
+                    android:textColor="@color/concept_color"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_change_user_scenario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:background="@drawable/square_border"
+                android:gravity="center"
+                android:paddingVertical="30dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_change_user_posture">
+
+                <TextView
+                    android:id="@+id/txt_change_user_scenario"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="시나리오 변경"
+                    android:textColor="@color/concept_color"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginBottom="24dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_change_user_scenario"
+                app:layout_constraintVertical_bias="1.0">
+
+                <LinearLayout
+                    android:id="@+id/btn_change_device"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/square_border"
+                    android:gravity="center"
+                    android:paddingVertical="15dp"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_change_user_posture">
+
+                    <TextView
+                        android:id="@+id/txt_change_device"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="기기 변경"
+                        android:textColor="@color/concept_color"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linear_exit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/radius_border_blue"
+                    android:gravity="center"
+                    android:padding="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent">
+
+                    <TextView
+                        android:id="@+id/txt_exit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="종료"
+                        android:textColor="@color/white"
+                        android:textSize="25sp"
+                        android:textStyle="bold"
+                        tools:layout_editor_absoluteX="8dp"
+                        tools:layout_editor_absoluteY="695dp" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
