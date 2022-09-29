@@ -1,6 +1,12 @@
 import numpy as np
 from PIL import Image, ImageDraw
 
+device_dict={"S":"Smartphone", 
+             "T":"Tablet",
+             "L":"Laptop",
+             "V":"VehicleLCD",
+             "M":"Monitor"}
+
 class Eye():
     def __init__(self, anno):
         self.anno = anno
@@ -9,9 +15,10 @@ class Eye():
                 setattr(self, ano['label'], ano)
             except:
                 print("what is this annotation?", ano)
-                
-        self.l_iris.update({"rotate":.4})
-        self.r_iris.update({"rotate":.1})
+
+        self._has_eyelid = hasattr(self, 'r_eyelid') & hasattr(self, 'l_eyelid')
+        self._has_iris = hasattr(self, 'r_iris') & hasattr(self, 'l_iris')
+        self._has_pupil = hasattr(self, 'r_center') & hasattr(self, 'l_cebter')
                 
     def __repr__(self):
         print(self.anno)
@@ -59,7 +66,7 @@ def mask_eyelid(eyelid, area, cropped):
     ImageDraw.Draw(mask).polygon(polygon, outline=1, fill=1)
     return np.array(mask)
 
-def mask_iris(iris, area):
+def mask_iris(iris, area, fill=2):
     """Mask for RITnet
     """
     nx = area['xrange'][1] - area['xrange'][0]
@@ -87,7 +94,7 @@ def mask_iris(iris, area):
     rad_cc = (xct**2/ra**2) + (yct**2/rb**2)
 
     mask = np.zeros_like(rad_cc)
-    mask[rad_cc <= 1.] = 1
+    mask[rad_cc <= 1.] = fill
     return mask.reshape(nx, ny)
 
 
@@ -104,12 +111,11 @@ def mask_one_eye(img, eye, side = "l"):
 
     # pupil as a small iris
     pupil ={'rotate': 0.0,
-            'rx': 0.2 * iris['rx'],
-            'ry': 0.2 * iris['rx'],
-            'cx': pupil_x,
-            'cy': pupil_y}
+                'rx': 0.2 * iris['rx'],
+                'ry': 0.2 * iris['rx'],
+                'cx': pupil_x,
+                'cy': pupil_y}
 
-    pupil_mask = mask_iris(pupil, area)
-    mask = mask + iris_mask + pupil_mask
+    pupil_mask = mask_iris(pupil, area, fill=3)
+    mask = np.maximum.reduce([mask, iris_mask, pupil_mask])
     return cropped, mask
-
