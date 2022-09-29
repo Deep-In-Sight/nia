@@ -55,7 +55,6 @@ import java.util.RandomAccess;
 import java.util.Timer;
 import java.util.TimerTask;
 
-//측정액티비티 - 자이로 센서값 기록 및 애니메이션 재생
 public class MeasurementActivity extends AppCompatActivity implements SerialInputOutputManager.Listener, SurfaceHolder.Callback {
     private final String TAG = MeasurementActivity.class.getSimpleName();
     private int screenWidth;
@@ -96,19 +95,23 @@ public class MeasurementActivity extends AppCompatActivity implements SerialInpu
     private String criRef;
     private String criGyroRef;
     private String criVideoRef;
+    private String criXYRef;
 
     //display rotation
     int displayNum;
     int writenum;
 
-   /* SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss");
-    String nowTime;*/
+    long now = System.currentTimeMillis();
+    Date date = new Date(now);
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy_MM_dd_hh_mm_ss");
+    private String nowTime = sdf.format(date);
 
     private final String USER = "user";
     private final String TEST_INFO = "test_info";
     private final String STORAGE = "storage";
 
     private CSVWriter csvWriter;
+    private CSVWriter XYWriter;
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
@@ -229,7 +232,7 @@ public class MeasurementActivity extends AppCompatActivity implements SerialInpu
         String subDIR3 = "T"+retry + "/";
         String subDIR4 = device + "/";
 
-        File dir = new File(Storage.getInstance().getStorage() + subDIR2 + subDIR3 + subDIR4);
+        File dir = new File(Storage.getInstance().getStorage() + subDIR2);
         Log.d(TAG, "storage path" + dir.getAbsolutePath());
 
         criRef = dir.getAbsolutePath()+"/";
@@ -276,7 +279,9 @@ public class MeasurementActivity extends AppCompatActivity implements SerialInpu
     private void makeTxt(String birth, String name, String scenarioNum, String device,
                          String status, String posture, String direction, String retry) {
         // csv 파일 생성
+        TestInfo testinfo = TestInfo.getInstance();
         String subDir5 = "GazeAngle1";
+        String subDir6 = "XY";
         String subject = "NIA22EYE";
         String location = "S1";
         String id = name;
@@ -285,26 +290,35 @@ public class MeasurementActivity extends AppCompatActivity implements SerialInpu
         String scenario = "S"+String.format("%02d", Integer.parseInt(scenarioNum));
         String display = device.equals("SmartPhone") ? "S": "T";
         String dataType = "gaze1";
+        String trackType = "tracking";
         String statusPath= "";
         String posturePath = "";
         String directionPath = "";
+        String statusString= "";
+        String postureString = "";
+        String directionString = "";
 
         int statusNum = TestInfo.getInstance().getStatus();
         switch (statusNum){
             case 0 :
                 statusPath = "F";
+                statusString = "집중";
                 break;
             case 1:
                 statusPath = "S";
+                statusString = "졸림";
                 break;
             case 2:
                 statusPath = "D";
+                statusString = "집중결핍";
                 break;
             case 3:
                 statusPath = "A";
+                statusString = "집중하락";
                 break;
             case 4:
                 statusPath = "N";
+                statusString = "태만";
                 break;
         }
 
@@ -313,59 +327,75 @@ public class MeasurementActivity extends AppCompatActivity implements SerialInpu
         switch (postureNum){
             case 0:
                 posturePath = "S";
+                postureString = "서기";
                 break;
             case 1:
                 posturePath = "D";
+                postureString = "앉기";
                 break;
             case 2:
                 posturePath = "H";
+                postureString = "한손기기사용";
                 break;
             case 3:
                 posturePath = "E";
+                postureString = "음식섭취";
                 break;
             case 4:
-                posturePath = "K";
+                posturePath = "T";
+                postureString = "무릎거치";
                 break;
             case 5:
                 posturePath = "U";
+                postureString = "휴대폰사용";
                 break;
             case 6:
                 posturePath = "C";
+                postureString = "턱괴기";
                 break;
             case 7:
                 posturePath = "P";
+                postureString = "위로눕기";
                 break;
             case 8:
                 posturePath = "L";
+                postureString = "옆으로눕기";
                 break;
             case 9:
                 posturePath = "F";
+                postureString = "엎드리기";
                 break;
-
         }
 
         int directionNum = TestInfo.getInstance().getDeviceDirection();
         switch (directionNum){
             case 0 :
                 directionPath = "L";
+                directionString = "좌측";
                 break;
             case 1:
                 directionPath = "T";
+                directionString = "상단";
                 break;
             case 2:
                 directionPath = "R";
+                directionString = "우측";
                 break;
         }
 
-        String fileName = subject + "_" + location + "_" + id + "_"
-                + uniqueNum + "_" + scenario + "_" + display + "_"
-                + dataType + "_" + statusPath + "_" + posturePath + "_" + directionPath+".csv";
+        String fileName = "GYRO_" + id + "_" + scenario + "_" + display + "_" + dataType + "_" + statusPath + "_" + posturePath + "_" + directionPath+".csv";
 
-        File dir = new File(criRef + "/" + subDir5);
+        String trackName = "XY_" + id + "_" + scenario + "_" + display + "_" + trackType + "_" + statusPath + "_" + posturePath + "_" + directionPath+".csv";
+
+        String koDIR = nowTime + "_" + scenario + "_" + postureString + "_" + statusString + "_" + directionString;
+        File dir = new File(criRef + "/" + koDIR);
         Log.d(TAG, "gyro1storage path" + dir.getAbsolutePath());
         Log.d(TAG, "gyro1FileName : "+fileName);
-        this.txtName = fileName;
         criGyroRef = dir.getAbsolutePath()+"/";
+
+        File XYdir = new File(criRef + "/" + koDIR);
+        criXYRef = XYdir.getAbsolutePath()+"/";
+
 
         if (!dir.exists()) {
             dir.mkdirs();
@@ -374,8 +404,21 @@ public class MeasurementActivity extends AppCompatActivity implements SerialInpu
             Log.d(TAG, "exist");
         }
 
+        if (!XYdir.exists()) {
+            XYdir.mkdirs();
+            Log.d(TAG, "mkdir");
+        } else {
+            Log.d(TAG, "exist");
+        }
+
         try {
             csvWriter = new CSVWriter(new FileWriter(criGyroRef + fileName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            XYWriter = new CSVWriter(new FileWriter(criXYRef + trackName));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -406,23 +449,31 @@ public class MeasurementActivity extends AppCompatActivity implements SerialInpu
         String statusPath= "";
         String posturePath = "";
         String directionPath = "";
+        String statusString= "";
+        String postureString = "";
+        String directionString = "";
 
         int statusNum = TestInfo.getInstance().getStatus();
         switch (statusNum){
             case 0 :
                 statusPath = "F";
+                statusString = "집중";
                 break;
             case 1:
                 statusPath = "S";
+                statusString = "졸림";
                 break;
             case 2:
                 statusPath = "D";
+                statusString = "집중결핍";
                 break;
             case 3:
                 statusPath = "A";
+                statusString = "집중하락";
                 break;
             case 4:
                 statusPath = "N";
+                statusString = "태만";
                 break;
         }
 
@@ -431,33 +482,43 @@ public class MeasurementActivity extends AppCompatActivity implements SerialInpu
         switch (postureNum){
             case 0:
                 posturePath = "S";
+                postureString = "서기";
                 break;
             case 1:
                 posturePath = "D";
+                postureString = "앉기";
                 break;
             case 2:
                 posturePath = "H";
+                postureString = "한손기기사용";
                 break;
             case 3:
                 posturePath = "E";
+                postureString = "음식섭취";
                 break;
             case 4:
-                posturePath = "S";
+                posturePath = "T";
+                postureString = "무릎거치";
                 break;
             case 5:
                 posturePath = "U";
+                postureString = "휴대폰사용";
                 break;
             case 6:
                 posturePath = "C";
+                postureString = "턱괴기";
                 break;
             case 7:
                 posturePath = "P";
+                postureString = "위로눕기";
                 break;
             case 8:
                 posturePath = "L";
+                postureString = "옆으로눕기";
                 break;
             case 9:
                 posturePath = "F";
+                postureString = "엎드리기";
                 break;
         }
 
@@ -465,22 +526,24 @@ public class MeasurementActivity extends AppCompatActivity implements SerialInpu
         switch (directionNum){
             case 0 :
                 directionPath = "L";
+                directionString = "좌측";
                 break;
             case 1:
                 directionPath = "T";
+                directionString = "상단";
                 break;
             case 2:
                 directionPath = "R";
+                directionString = "우측";
                 break;
         }
 
 
-        String fileName = subject + "_" + location + "_" + id + "_"
-                + uniqueNum + "_" + scenario + "_" + display + "_"
-                + dataType + "_" + statusPath + "_" + posturePath + "_"+directionPath+ ".mp4";
+        String fileName = "VIDEO_" + id + "_" + scenario + "_" + display + "_" + dataType + "_" + statusPath + "_" + posturePath + "_"+directionPath+ ".mp4";
 
+        String koDIR = nowTime + "_" + scenario + "_" + postureString + "_" + statusString + "_" + directionString;
 
-        File dir = new File(criRef + "/" + subDir5);
+        File dir = new File(criRef + "/" + koDIR);
         Log.d(TAG, "rgbstorage path" + dir.getAbsolutePath());
         Log.d(TAG, "rgbFileName : "+fileName);
 
@@ -540,6 +603,27 @@ public class MeasurementActivity extends AppCompatActivity implements SerialInpu
     private void stopWriteTxt() {
         try {
             csvWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void writeXY(String value) {
+        /*try {
+            this.raf.seek(this.raf.length());
+            this.raf.writeBytes(value + "\n");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+        String[] entries = {value};
+        XYWriter.writeNext(entries);
+    }
+
+    private void stopWriteXY() {
+        try {
+            XYWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -636,6 +720,7 @@ public class MeasurementActivity extends AppCompatActivity implements SerialInpu
                             isRecord = false;
                             stopRecord();
                             stopWriteTxt();
+                            stopWriteXY();
                             Log.d(TAG, "animation end");
                             Log.d(TAG, String.valueOf(elapsedTime));
                             intentResultActivity();
@@ -821,6 +906,9 @@ public class MeasurementActivity extends AppCompatActivity implements SerialInpu
             circle.setX(circleX);
             circle.setY(circleY);
         }
+
+        String XY = "" + circleX + " , " + circleY;
+        writeXY(XY);
     }
 
     private void showTimerDialog() {

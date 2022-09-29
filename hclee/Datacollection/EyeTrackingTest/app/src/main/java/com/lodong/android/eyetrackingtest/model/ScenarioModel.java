@@ -5,7 +5,6 @@ import android.graphics.Point;
 import android.view.Display;
 import android.view.WindowManager;
 
-//사용자가 선택한 정보에 따른 시나리오 모델을 생성하는 클래스
 public class ScenarioModel {
     private final String TAG = ScenarioModel.class.getSimpleName();
     private Activity activity;

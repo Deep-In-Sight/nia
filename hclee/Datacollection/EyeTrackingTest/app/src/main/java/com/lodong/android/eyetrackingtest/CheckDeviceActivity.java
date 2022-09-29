@@ -40,7 +40,6 @@ import java.io.IOException;
 
 import java.util.List;
 
-//테스트전 모듈 상태 확인용 액티비티
 public class CheckDeviceActivity extends AppCompatActivity implements SerialInputOutputManager.Listener, SurfaceHolder.Callback {
     private final String TAG = CheckDeviceActivity.class.getSimpleName();
     private TextView txtGyroValue;

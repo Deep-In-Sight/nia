@@ -18,7 +18,6 @@ import com.lodong.android.eyetrackingtest.ResultActivity;
 
 import java.io.InputStream;
 
-@Deprecated
 public class FireStorageInterface {
     private final String TAG = FireStorageInterface.class.getSimpleName();
     private FirebaseStorage storage;

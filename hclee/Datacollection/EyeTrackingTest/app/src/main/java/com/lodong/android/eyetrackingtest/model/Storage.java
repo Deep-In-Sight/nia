@@ -2,7 +2,6 @@ package com.lodong.android.eyetrackingtest.model;
 
 import java.io.Serializable;
 
-//사용자의 선택값에 따른 경로 값을 담는 클래스
 public class Storage implements Serializable {
     private static Storage instance;
     private String storage;

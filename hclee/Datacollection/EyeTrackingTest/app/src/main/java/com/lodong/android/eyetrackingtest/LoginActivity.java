@@ -19,7 +19,6 @@ import com.lodong.android.eyetrackingtest.model.Storage;
 import com.lodong.android.eyetrackingtest.model.TestInfo;
 import com.lodong.android.eyetrackingtest.model.User;
 
-//사용자의 정보를 담는 액티비티
 public class LoginActivity extends AppCompatActivity {
     private final String TAG = LoginActivity.class.getSimpleName();
     private final String MAN = "남성";

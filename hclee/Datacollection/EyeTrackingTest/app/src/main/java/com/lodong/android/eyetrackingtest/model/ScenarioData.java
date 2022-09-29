@@ -1,6 +1,5 @@
 package com.lodong.android.eyetrackingtest.model;
 
-//시나리오 이동경로를 담는 클래스
 public class ScenarioData {
     private final static int[] focusPath = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3};
     private final static int[] concentrationDeficiencyOrNegligencePath = {12, 12, 12, 12, 12, 12, 12, 12, 12, 12};

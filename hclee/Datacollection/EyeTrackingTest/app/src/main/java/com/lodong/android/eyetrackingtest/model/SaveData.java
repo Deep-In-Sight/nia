@@ -1,6 +1,5 @@
 package com.lodong.android.eyetrackingtest.model;
 
-@Deprecated
 public class SaveData {
     private static SaveData instance;
     private String saveVideoDownloadUri;

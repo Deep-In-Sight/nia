@@ -1,6 +1,5 @@
 package com.lodong.android.eyetrackingtest.camera;
 
-@Deprecated
 public class RecordInfo {
     private final String TAG = RecordInfo.class.getSimpleName();
     private static RecordInfo instance;

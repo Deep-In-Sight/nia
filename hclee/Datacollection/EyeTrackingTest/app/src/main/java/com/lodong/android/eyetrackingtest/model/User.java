@@ -2,7 +2,6 @@ package com.lodong.android.eyetrackingtest.model;
 
 import java.io.Serializable;
 
-//테스트하는 유저의 값을 담는 클래스
 public class User implements Serializable {
     private static User instance;
     private String device_type;

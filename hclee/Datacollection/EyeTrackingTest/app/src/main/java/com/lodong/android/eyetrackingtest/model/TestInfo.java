@@ -2,7 +2,6 @@ package com.lodong.android.eyetrackingtest.model;
 
 import java.io.Serializable;
 
-//사용자가 선택한 테스트 모델 값을 담는 클래스
 public class TestInfo implements Serializable {
     private static TestInfo instance;
     private final String[] postureList = {"서기", "앉기", "한손 기기 사용", "음식 섭취", "무릎 거치", "휴대폰 사용", "턱 괴기", "위로 눕기", "옆으로 눕기", "엎드리기"};

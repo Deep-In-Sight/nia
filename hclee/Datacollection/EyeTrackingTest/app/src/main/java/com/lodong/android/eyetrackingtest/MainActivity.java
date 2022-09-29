@@ -46,8 +46,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-
-//모듈 및 기기 정보를 담는 클래스
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private RadioGroup rdgDevice;
@@ -224,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void makeFolder() {
-        File dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/HOME/" + "S1/");
+        File dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/HOME/");
         Log.d(TAG, "storage path" + dir.getAbsolutePath());
 
         Storage storage = Storage.getInstance();

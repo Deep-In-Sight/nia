@@ -15,7 +15,6 @@ import com.lodong.android.eyetrackingtest.model.Storage;
 import com.lodong.android.eyetrackingtest.model.TestInfo;
 import com.lodong.android.eyetrackingtest.model.User;
 
-
 public class SelectDirectionActivity extends AppCompatActivity {
     private final String TAG = SelectDirectionActivity.class.getSimpleName();
     private RadioGroup rdgTestLocation;

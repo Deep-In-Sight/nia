@@ -29,7 +29,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
-//결과 화면 출력 액티비티
 public class ResultActivity extends AppCompatActivity {
     private static final String TAG = ResultActivity.class.getSimpleName() ;
     private FireStorageInterface fireStorageInterface;

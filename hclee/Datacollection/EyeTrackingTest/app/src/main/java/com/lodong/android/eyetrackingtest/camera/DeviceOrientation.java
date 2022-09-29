@@ -7,7 +7,6 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.ExifInterface;
 
-@Deprecated
 public class DeviceOrientation {
     private final int ORIENTATION_PORTRAIT = ExifInterface.ORIENTATION_ROTATE_90;
     private final int ORIENTATION_LANDSCAPE_REVERSE = ExifInterface.ORIENTATION_ROTATE_180;

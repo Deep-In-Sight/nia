@@ -10,7 +10,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-@Deprecated
 public class RealTimeDatabaseInterface {
     private final String TAG = RealTimeDatabaseInterface.class.getSimpleName();
     private FirebaseDatabase database = FirebaseDatabase.getInstance("https://eyetracker-8de2c-default-rtdb.asia-southeast1.firebasedatabase.app/");
