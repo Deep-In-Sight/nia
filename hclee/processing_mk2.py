@@ -7,7 +7,7 @@ import numpy as np
 import os
 import shutil
 
-targetIdList = glob.glob("*/pro*/S1/*")
+targetIdList = glob.glob("pro*/S1/*")
 targetIdList.sort()
 print(targetIdList)
 
@@ -483,7 +483,7 @@ for targetId in targetIdList:
 target = ['CamAngle','DistCam2Face','DistDisp2Face']
 
 for tar in target:
-    fpath = glob.glob(f"*/pro*/S1/*/T1/*/{tar}/*.csv")
+    fpath = glob.glob(f"pro*/S1/*/T1/*/{tar}/*.csv")
     fpath.sort()
     
     for f in fpath:
