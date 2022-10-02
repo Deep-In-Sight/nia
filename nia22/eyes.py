@@ -1,5 +1,8 @@
 import numpy as np
+import matplotlib.pyplot as plt 
+from matplotlib.patches import Ellipse
 from PIL import Image, ImageDraw
+
 
 device_dict={"S":"Smartphone", 
              "T":"Tablet",
@@ -119,3 +122,44 @@ def mask_one_eye(img, eye, side = "l"):
     pupil_mask = mask_iris(pupil, area, fill=3)
     mask = np.maximum.reduce([mask, iris_mask, pupil_mask])
     return cropped, mask
+
+def iris_ellipse(iris):
+    xc, yc = iris['cx'], iris['cy']
+    ra = iris['rx']
+    rb = iris['ry']
+    angle = iris['rotate']
+
+    return Ellipse((xc, yc), 2*ra,2*rb, angle=angle, alpha=0.5,
+                      facecolor='none', edgecolor="red", lw=3)
+    
+def plot_eyes(img, eyes, fn=None):
+    fig, ax = plt.subplots(subplot_kw={'aspect': 'equal'})
+    fig.set_size_inches(16,9)
+    plt.subplots_adjust(top = 1, bottom = 0, right = 1, left = 0, 
+                hspace = 0, wspace = 0)
+    plt.margins(0,0)
+
+    # 홍채 L
+    ax.add_artist(iris_ellipse(eyes.l_iris))
+
+    # 공막 L
+    p_left_eye = np.array(eyes.l_eyelid['points'])
+    plt.plot(p_left_eye[:,0], p_left_eye[:,1], lw=1)
+
+    # 홍채 R
+    ax.add_artist(iris_ellipse(eyes.r_iris))
+
+    # 공막 R
+    p_right_eye = np.array(eyes.r_eyelid['points'])
+    plt.plot(p_right_eye[:,0], p_right_eye[:,1], lw=1)
+
+    ax.imshow(img)
+    ax.set_axis_off()
+
+    ax.xaxis.set_major_locator(plt.NullLocator())
+    ax.yaxis.set_major_locator(plt.NullLocator())
+    if fn:
+        plt.savefig(fn, bbox_inches='tight', pad_inches = 0)
+        plt.close()
+    else:
+        plt.show()
