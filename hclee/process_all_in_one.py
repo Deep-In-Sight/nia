@@ -1,14 +1,12 @@
+import os
+import shutil
+import math
 import glob
 import cv2
 import mediapipe as mp
 import pandas as pd
-import math
 import numpy as np
-import os
-import shutil
-
 from scipy.interpolate import interp1d
-
 
 def process_head(arr, factor):
     arr['roll'] -= np.mean(arr['roll'][5::100])
@@ -40,13 +38,14 @@ def move_csv(targets):
                 os.makedirs(dirpath)
             savepath = 'newprocessing/' + f
             shutil.copy(f, savepath)
-            print(savepath)
+            #print(savepath)
 
 
 def move_vids(vidlist):
     for vidpath in vidlist:
         vd = cv2.VideoCapture(vidpath)
         len = length = int(vd.get(cv2.CAP_PROP_FRAME_COUNT))
+        vd.release()
 
         angpath = vidpath.replace('/RGB/','/CamAngle/').replace('_rgb_','_cam_').replace('.mp4','.csv')
         disCampath = vidpath.replace('/RGB/','/DistCam2Face/').replace('_rgb_','_dcam_').replace('.mp4','.csv')
@@ -108,6 +107,8 @@ for targetId in targetIdList:
         os.makedirs(f"{device}/DistCam2Face", exist_ok=True)
         os.makedirs(f"{device}/DistDisp2Face", exist_ok=True)
         os.makedirs(f"{device}/CamAngle", exist_ok=True)
+        os.makedirs(f"{device}/FaceAngle", exist_ok=True)
+        os.makedirs(f"{device}/Eye-tracker", exist_ok=True)
         # 모니터, 차량의 경우 DEPTH 센서를 가지고 있고, Gyro는 파일 중 소수만 데이터가 제대로 들어가 있다.
         # DEPTH 센서로 들어온 값의 경우 DistDisp2Face dir에 txt로 존재하며, Gyro 데이터의 경우 CamAngle dir에 txt로 존재한다.
         # 모니터, 차량의 코드 처리 순서는 Distance Cam 생성, Distance Display csv 처리, CamAngle csv 처리 순서로 진행된다.
@@ -142,11 +143,11 @@ for targetId in targetIdList:
             saveName_head = videoPath.replace("/RGB/","/FaceAngle/").replace('_rgb_','_head_').replace('.mp4','.csv')
             
             video = cv2.VideoCapture(videoPath)
-            frameCount = video.get(cv2.CAP_PROP_FRAME_COUNT)
+            frameCount = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
             frameCountDict[videoPath] = frameCount
 
-
-            arr = np.zeros(frameCount, dtype=[("roll", float), 
+            print("FRAME COUNT", frameCount)
+            headposes = np.zeros(frameCount, dtype=[("roll", float), 
                                        ("pitch", float),
                                        ("yaw", float)])
             
@@ -168,6 +169,15 @@ for targetId in targetIdList:
                     image.flags.writeable = True
 
                     img_h, img_w, img_c = image.shape
+
+                    # The camera matrix
+                    focal_length = 1 * img_w
+
+                    cam_matrix = np.array([ [focal_length, 0, img_h / 2],
+                                            [0, focal_length, img_w / 2],
+                                            [0, 0, 1]])                    
+                    # The Distortion Matrix
+                    dist_matrix = np.zeros((4, 1), dtype=np.float64)
 
                     ## Head pose ##########################
                     for face_landmarks in results.multi_face_landmarks:
@@ -191,15 +201,7 @@ for targetId in targetIdList:
                         # Convert it to the NumPy array
                         face_3d = np.array(face_3d, dtype=np.float64)
 
-                        # The camera matrix
-                        focal_length = 1 * img_w
-
-                        cam_matrix = np.array([ [focal_length, 0, img_h / 2],
-                                                [0, focal_length, img_w / 2],
-                                                [0, 0, 1]])
-
-                        # The Distortion Matrix
-                        dist_matrix = np.zeros((4, 1), dtype=np.float64)
+                        dist_matrix[:,:] = 0
 
                         # Solve PnP
                         success, rot_vec, trans_vec = cv2.solvePnP(face_3d, face_2d, cam_matrix, dist_matrix)
@@ -209,9 +211,9 @@ for targetId in targetIdList:
 
                         # Get angles
                         angles, mtxR, mtxQ, Qx, Qy, Qz = cv2.RQDecomp3x3(rmat)
-                        arr['roll'][i]  = angles[0]
-                        arr['pitch'][i] = angles[1]
-                        arr['yaw'][i]   = angles[2]
+                        headposes['roll'][i]  = angles[0]
+                        headposes['pitch'][i] = angles[1]
+                        headposes['yaw'][i]   = angles[2]
                     ## Head pose ##########################
                     i+=1
 
@@ -254,13 +256,13 @@ for targetId in targetIdList:
 
             # Post process 
             factor = 360*10 # Temporary...
-            process_head(arr, factor)
+            process_head(headposes, factor)
 
 
             ### Save head pose 
             with open(saveName_head, "w") as f:
                 f.write("[head angle] roll      pitch      yaw\n")
-                for roll, pitch, yaw in arr:
+                for roll, pitch, yaw in headposes:
                     f.write(f"{roll:.4f}, {pitch:.4f}, {yaw:.4f}\n")
 
             print(saveName_head, "done")
