@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt 
 from matplotlib.patches import Ellipse
 from PIL import Image, ImageDraw
+import cv2
 
 
 device_dict={"S":"Smartphone", 
@@ -133,6 +134,8 @@ def iris_ellipse(iris):
                       facecolor='none', edgecolor="red", lw=3)
     
 def plot_eyes(img, eyes, fn=None):
+    """plot eyelid using OpenCv
+    """
     fig, ax = plt.subplots(subplot_kw={'aspect': 'equal'})
     fig.set_size_inches(16,9)
     plt.subplots_adjust(top = 1, bottom = 0, right = 1, left = 0, 
@@ -163,3 +166,85 @@ def plot_eyes(img, eyes, fn=None):
         plt.close()
     else:
         plt.show()
+
+
+def plot_eyes_plt(img, eyes, fn=None):
+    fig, ax = plt.subplots(subplot_kw={'aspect': 'equal'})
+    fig.set_size_inches(16,9)
+    plt.subplots_adjust(top = 1, bottom = 0, right = 1, left = 0, 
+                hspace = 0, wspace = 0)
+    plt.margins(0,0)
+
+    # 홍채 L
+    ax.add_artist(iris_ellipse(eyes.l_iris))
+
+    # 공막 L
+    p_left_eye = np.array(eyes.l_eyelid['points'])
+    plt.plot(p_left_eye[:,0], p_left_eye[:,1], lw=1)
+
+    # 홍채 R
+    ax.add_artist(iris_ellipse(eyes.r_iris))
+
+    # 공막 R
+    p_right_eye = np.array(eyes.r_eyelid['points'])
+    plt.plot(p_right_eye[:,0], p_right_eye[:,1], lw=1)
+
+    ax.imshow(img)
+    ax.set_axis_off()
+
+    ax.xaxis.set_major_locator(plt.NullLocator())
+    ax.yaxis.set_major_locator(plt.NullLocator())
+    if fn:
+        plt.savefig(fn, bbox_inches='tight', pad_inches = 0)
+        plt.close()
+    else:
+        plt.show()
+
+
+def draw_one_eye(image, eyelid, iris, alpha=0.4):
+    """Draw eyelid and iris using CV2"""
+    isClosed = True
+    color = (0,0,255)
+    thickness = 1
+
+    overlay = image.copy()
+    pts = np.array(eyelid['points']).reshape((-1, 1, 2))
+    cv2.polylines(overlay, [pts],
+                  isClosed, color, thickness)
+
+    image = cv2.addWeighted(overlay, alpha, image, 1 - alpha, 0)
+    
+    color = (0,255,0)
+    cv2.ellipse(overlay, 
+                (int(iris['cx']), int(iris['cy'])), 
+                (int(iris['rx']), int(iris['ry'])),
+                iris['rotate'],
+                0, 360, color, thickness)
+    image = cv2.addWeighted(overlay, alpha, image, 1 - alpha, 0)
+    
+    return image
+
+
+def draw_two_eyes(image, eye, thickness = 1, alpha=0.4):
+    """Draw eyelid and iris using CV2"""
+    isClosed = True
+    color = (0,0,255)
+
+    overlay = image.copy()
+    for eyelid in [eye.l_eyelid, eye.r_eyelid]:
+        pts = np.array(eyelid['points']).reshape((-1, 1, 2))
+        cv2.polylines(overlay, [pts],
+                    isClosed, color, thickness)
+
+    for iris in [eye.l_iris, eye.r_iris]:
+        color = (0,255,0)
+        cv2.ellipse(overlay, 
+                    (int(iris['cx']), int(iris['cy'])), 
+                    (int(iris['rx']), int(iris['ry'])),
+                    iris['rotate'],
+                    0, 360, color, thickness)
+    
+    image = cv2.addWeighted(overlay, alpha, image, 1 - alpha, 0)
+    
+    return image
+
