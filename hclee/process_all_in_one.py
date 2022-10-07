@@ -12,6 +12,9 @@ import numpy as np
 from scipy.interpolate import interp1d
 from eyetracker import Scenario
 
+# [10.07] processing후 Tablet과 Smartphone에서 CamAngle이 *.txt라고 가정
+
+
 def process_head(arr, factor):
     arr['roll'] -= np.mean(arr['roll'][5::100])
     arr['pitch'] -= np.mean(arr['pitch'][5::100])
@@ -167,9 +170,10 @@ if __name__ == '__main__':
     for targetId in targetIdList:
         backup(targetId)
 
+    #deviceList = ["Monitor", "Laptop", "VehicleLCD", "Tablet", "Smartphone"]
     for targetId in targetIdList:
         deviceList = glob.glob(f"{targetId}/T1/*")
-        deviceList.sort()
+        #deviceList.sort()
 
         for device in deviceList:
             # duplicate "K" and "T"
@@ -360,9 +364,9 @@ if __name__ == '__main__':
 
             #CamAngle txt -> csv
             camAnglePathList = glob.glob(f"{device}/CamAngle/*.txt")
-            camAnglePathList.sort()
+            camAnglePathList.sort()            
             for camAnglePath in camAnglePathList:
-                if os.path.getsize(camAnglePath) > 0:
+                if os.path.getsize(camAnglePath) > 10:
                     with open(camAnglePath) as camAngleTxt:
                         camAngleValue = camAngleTxt.read().splitlines()
                         while "" in camAngleValue:
@@ -370,13 +374,12 @@ if __name__ == '__main__':
                         
                         camAngleCsvData = []
                         for camAngle in camAngleValue:
-                            camAngles = camAngle.split(',')
-                            camAngleRPY = [camAngles[1], camAngles[2], camAngles[3]]
+                            camAngleRPY = camAngle.split(',')[1:4]
+                            #= [camAngles[1], camAngles[2], camAngles[3]]
                             camAngleCsvData.append(camAngleRPY)
-            
+                        
+                        CamAngleCsv = pd.DataFrame(camAngleCsvData, columns = ['Roll','Pitch','Yaw'])
                         if deviceName in ['Monitor', 'VehicleLCD', 'Laptop']:                        
-                            CamAngleCsv = pd.DataFrame(camAngleCsvData, columns = ['Roll','Pitch','Yaw'])
-                            
                             for videoPath in videoPathList:
                                 saveName = videoPath.replace("/RGB/","/CamAngle/").replace("_rgb_","_cam_").replace(".mp4",".csv")
                                 CamAngleCsv.to_csv(saveName, index=False)
@@ -384,9 +387,21 @@ if __name__ == '__main__':
                             break
                         
                         elif deviceName in ['Tablet', 'Smartphone']:                       
-                            CamAngleCsv = pd.DataFrame(camAngleCsvData, columns = ['Roll','Pitch','Yaw'])
                             saveName = camAnglePath.replace(".txt",".csv")
                             CamAngleCsv.to_csv(saveName, index=False)
+                else:
+                    # Delete empty files
+                    os.remove(camAnglePath)
+            
+            # Copy if missing CamAngle
+            if deviceName in ['Monitor', 'VehicleLCD', 'Laptop']:
+                camAngle_good = glob.glob(f"{device}/CamAngle/*.txt")[0]
+                for videoPath in videoPathList:
+                    camAnglePath = videoPath.replace("/RGB/","/CamAngle/").replace("_rgb_","_cam_").replace(".mp4",".txt")
+                    if not os.path.isfile(camAnglePath):
+                        print("Copying CamAngle", camAnglePath)
+                        shutil.copyfile(camAngle_good, camAnglePath)
+
 
     # Move .csv files under new directory
     #targets = ['CamAngle','DistCam2Face','DistDisp2Face', 'Eye-Tracker', 'FaceAngle']
