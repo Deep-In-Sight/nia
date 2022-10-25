@@ -272,24 +272,24 @@ if __name__ == '__main__':
                 video.release()
 
                 ## Eye-tracker #################
-                sco.set_points(frameCount)
+                # sco.set_points(frameCount)
 
-                fn_ = videoPath.split("/")[-1]
-                _, _, ID, _, scenario, device, imgtype, status, action, orientation = fn_.split("_")
-                orientation = orientation.split(".mp4")[0]
+                # fn_ = videoPath.split("/")[-1]
+                # _, _, ID, _, scenario, device, imgtype, status, action, orientation = fn_.split("_")
+                # orientation = orientation.split(".mp4")[0]
 
-                #### Eye-tracker
-                # Knee -> lapTop
-                #fn_ = fn_.replace("_K_", "_T_")
+                # #### Eye-tracker
+                # # Knee -> lapTop
+                # #fn_ = fn_.replace("_K_", "_T_")
 
-                #if os.path.isfile(saveName_eye) and os.path.getsize(saveName_eye) > 1000:
-                #    print(">>>>>   file exists", saveName_eye)
-                #    continue
-                with open(saveName_eye, "w") as f:
-                    f.write("[point] x y \n")
-                    px, py = random.choice(sco.scenarios[status])()
-                    for xx, yy in zip(px, py):
-                        f.write(f"{int(xx)}, {int(yy)}\n")
+                # #if os.path.isfile(saveName_eye) and os.path.getsize(saveName_eye) > 1000:
+                # #    print(">>>>>   file exists", saveName_eye)
+                # #    continue
+                # with open(saveName_eye, "w") as f:
+                #     f.write("[point] x y \n")
+                #     px, py = random.choice(sco.scenarios[status])()
+                #     for xx, yy in zip(px, py):
+                #         f.write(f"{int(xx)}, {int(yy)}\n")
                 ######################################################
 
                 # Post process 
@@ -318,10 +318,10 @@ if __name__ == '__main__':
                 df.to_csv(saveName, index=False)
 
                 saveName_ddist = saveName.replace("/DistCam2Face/","/DistDisp2Face/").replace("_dcam_","_ddisp_")
-                if deviceName in ['Tablet', 'Smartphone', 'Laptop']:
+                if deviceName in ['Tablet', 'Smartphone', 'Laptop', 'Monitor']:
                     df.to_csv(saveName_ddist, index=False)
 
-                # Rename files 
+                # #Rename files 
                 # if deviceName in ['Tablet', 'Smartphone', 'Laptop']:
                 #     #Distance Display csv 처리 (스마트폰, 랩탑, 태블릿의 경우 depth가 없음)
                 #     dcamPathlist = glob.glob(f"{device}/DistCam2Face/*.csv")
@@ -335,7 +335,7 @@ if __name__ == '__main__':
                 #     for dcamPath in dcamPathlist:
                 #         saveName = dcamPath.replace("/DistCam2Face/","/DistDisp2Face/").replace("_dcam_","_ddisp_")
                 #         print("saveName", saveName)
-                        # shutil.copyfile(dcamPath,saveName)
+                #         shutil.copyfile(dcamPath,saveName)
                 else:
                     #Distance Display csv 처리 (모니터, 차량의 경우 Depth 센서가 존재함)
                     #ddispPathlist = glob.glob(f"{device}/DistDisp2Face/*.txt")
@@ -393,14 +393,19 @@ if __name__ == '__main__':
                     # Delete empty files
                     os.remove(camAnglePath)
             
-            # Copy if missing CamAngle
-            if deviceName in ['Monitor', 'VehicleLCD', 'Laptop']:
-                camAngle_good = glob.glob(f"{device}/CamAngle/*.txt")[0]
-                for videoPath in videoPathList:
-                    camAnglePath = videoPath.replace("/RGB/","/CamAngle/").replace("_rgb_","_cam_").replace(".mp4",".txt")
-                    if not os.path.isfile(camAnglePath):
-                        print("Copying CamAngle", camAnglePath)
-                        shutil.copyfile(camAngle_good, camAnglePath)
+            # # Copy if missing CamAngle
+            # if deviceName in ['Monitor', 'VehicleLCD', 'Laptop']:
+            #     camAngle_good = glob.glob(f"{device}/CamAngle/*.txt")
+            #     if len(camAngle_good) > 0:
+            #         for camAngle in camAngle_good:
+            #             cam_new = camAngle.replace(".txt", ".csv")
+            #             shutil.copyfile(camAngle, cam_new)
+            #             #print(camAngle_good, camAngle)
+            #     for videoPath in videoPathList:
+            #         camAnglePath = videoPath.replace("/RGB/","/CamAngle/").replace("_rgb_","_cam_").replace(".mp4",".csv")
+            #         if not os.path.isfile(camAnglePath):
+            #             print("Copying CamAngle", camAnglePath)
+            #             shutil.copyfile(camAngle_good, camAnglePath)
 
 
     # Move .csv files under new directory
