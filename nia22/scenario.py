@@ -81,6 +81,9 @@ class Info():
             return out
         else:
             raise StopIteration
+
+    def __len__(self):
+        return len(self.fn_family)
     
     def get_nums(self):
         """get the list of frames in a video"""
