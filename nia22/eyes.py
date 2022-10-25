@@ -32,8 +32,14 @@ class Eye():
 def crop_eye(img, eyelid, magnify=1.5, width=400, height=640):
     """Crop around a eye enforcing the aspect ratio 
     
+    Parameters
+    ----------
+
+    eyelid: Eye.[l,r]_eyelid
+
     RITnet is trained with 400 x 640 images.
     """
+    eyelid = np.array(eyelid['points'])
     xl = eyelid[:,0].min()
     xr = eyelid[:,0].max()
     yl = eyelid[:,1].min()
@@ -104,7 +110,7 @@ def mask_iris(iris, area, fill=2):
 
 def mask_one_eye(img, eye, side = "l"):
     eyelid = getattr(eye, f"{side}"+"_eyelid")
-    area, cropped = crop_eye(img, np.array(eyelid['points']))
+    area, cropped = crop_eye(img, eyelid)
     mask = mask_eyelid(eyelid, area, cropped)
 
     iris = getattr(eye, f"{side}"+"_iris")
@@ -225,7 +231,7 @@ def draw_one_eye(image, eyelid, iris, alpha=0.4):
     return image
 
 
-def draw_two_eyes(image, eye, thickness = 1, alpha=0.4):
+def draw_two_eyes(image, eye, thickness = 1, alpha=0.4, fn=None):
     """Draw eyelid and iris using CV2"""
     isClosed = True
     color = (0,0,255)
@@ -246,5 +252,8 @@ def draw_two_eyes(image, eye, thickness = 1, alpha=0.4):
     
     image = cv2.addWeighted(overlay, alpha, image, 1 - alpha, 0)
     
-    return image
+    if fn:
+        cv2.imwrite(fn, image)
+    else:
+        return image
 
