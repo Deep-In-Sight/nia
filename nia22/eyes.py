@@ -78,8 +78,8 @@ def mask_iris(iris, area, fill=2):
     xc = iris['cx'] - area['yrange'][0]
     yc = iris['cy'] - area['xrange'][0]
 
-    xdist = (x-xc).reshape(nx,ny)
-    ydist = (y-yc).reshape(nx,ny)
+    #xdist = (x-xc).reshape(nx,ny)
+    #ydist = (y-yc).reshape(nx,ny)
 
     angle = iris['rotate']
     ra = iris['rx']
@@ -118,4 +118,5 @@ def mask_one_eye(img, eye, side = "l"):
 
     pupil_mask = mask_iris(pupil, area, fill=3)
     mask = np.maximum.reduce([mask, iris_mask, pupil_mask])
+    del iris_mask, pupil_mask, area, eyelid
     return cropped, mask
