@@ -22,6 +22,7 @@ def check_mask(cropped, mask, fn):
     plt.close()
 
 def gen_mask(img, anno, fn, png_dir, label_dir):
+    """RITNet mask generation"""
     # temporary version
     eye = Eye(anno["Annotations"]['annotations'])
     if eye._has_eyelid & eye._has_iris:
