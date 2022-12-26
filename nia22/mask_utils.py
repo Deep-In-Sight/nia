@@ -30,15 +30,16 @@ def gen_mask(img, anno, fn, png_dir, label_dir):
         cropped = cv2.cvtColor(cropped, cv2.COLOR_BGR2RGB)
         fn_png = png_dir+fn+"r.png"
         cv2.imwrite(fn_png, cropped)
-        check_mask(cropped, mask, fn_png.replace(".png", "_check.png"))
+        check_mask(cropped, mask, fn_png.replace(".png", "_check.png").replace("/images/","/"))
         np.save(label_dir+fn+"r.npy",mask)
 
         cropped, mask = mask_one_eye(img, eye, "l")
         cropped = cv2.cvtColor(cropped, cv2.COLOR_BGR2RGB)
         fn_png = png_dir+fn+"l.png"
         cv2.imwrite(fn_png, cropped)
-        check_mask(cropped, mask, fn_png.replace(".png", "_check.png"))
+        check_mask(cropped, mask, fn_png.replace(".png", "_check.png").replace("/images/","/"))
         np.save(label_dir+fn+"l.npy" ,mask)
                 
     else:
+        print(fn)
         print("not enough labels. Eyes are closed?")

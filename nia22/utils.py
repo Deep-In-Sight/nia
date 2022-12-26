@@ -33,7 +33,7 @@ class VidLoader():
         print("Base dir:", self._s_r_dir)
         self._ddict = two_way_dict(device=True)
         
-    def load(self, uid=None, device=None, status=None, posture=None, orientation=None):
+    def load(self, uid=None, scen=None, device=None, status=None, posture=None, orientation=None):
         if not uid: 
             uid="*"
         else:
@@ -47,15 +47,16 @@ class VidLoader():
                 device = self._ddict[dkey]
             except:
                 dkey = self._ddict[device]
-
+        if not scen: scen = "*"
         if not status: status="*"
         if not posture: posture="*"
         if not orientation: orientation="*"
             
         search_str = str(self._s_r_dir + f"/{uid}/T1/{device}/RGB/" + \
-                         f"NIA22EYE_S1_{uid}_T1_S03_{dkey}_rgb_{status}_{posture}_{orientation}.mp4")
+                         f"NIA22EYE_S1_{uid}_T1_{scen}_{dkey}_rgb_{status}_{posture}_{orientation}.mp4")
         print(search_str)
         vid_list = glob(search_str)
+        print("Found", len(vid_list), "videos")
         return vid_list
 
     def _switch_fn(self, fn):
