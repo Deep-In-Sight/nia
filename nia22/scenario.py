@@ -1,7 +1,7 @@
 from email.mime import base
 import os
 from glob import glob
-from .eyes import device_dict
+from nia22.eyes import device_dict
 
 class Info():
     """An iterator over the frames of a video.
@@ -18,10 +18,12 @@ class Info():
         except:
             devices = [devices]
         
+        print(devices)
         if scen:
             if base_dir:
                 self._dir = base_dir
-                self.fn_full = glob(self._dir + f"*{devices[0]}_*_{scen}_???.json")[0]
+                #self.fn_full = glob(self._dir + f"*{devices[0]}_*_{scen}_???.json")[0]
+                self.fn_full = glob(f"/{uid}/T1/{device}/json_rgb/*.json")[0]
             else:
                 raise Exception("[ERROR], No base_dir is given")
         elif fn_full:
